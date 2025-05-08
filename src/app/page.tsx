@@ -30,7 +30,7 @@ export default function TicketSearchApp() {
     if (!userId) return alert('Не удалось получить user_id');
 
     try {
-      await fetch('https://cdc0-158-220-102-147.ngrok-free.app/search', {
+      await fetch('https://1e89-158-220-102-147.ngrok-free.app/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
