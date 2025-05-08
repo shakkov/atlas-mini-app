@@ -19,6 +19,7 @@ export default function TicketSearchApp() {
       }
     } catch (err) {
       alert('Ошибка при инициализации Telegram WebApp');
+      console.log('err', err);
     }
   }, []);
 
