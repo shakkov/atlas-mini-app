@@ -17,7 +17,6 @@ export default function TicketSearchApp() {
       console.warn('Telegram WebApp не доступен');
     }
   }, []);
-  
 
   const handleSubmit = async () => {
     if (!date || !time1 || !time2) return alert('Заполните все поля');
@@ -31,7 +30,7 @@ export default function TicketSearchApp() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        user_id: userId,
+        user_id: 123,
         from,
         to,
         date,
@@ -101,9 +100,9 @@ export default function TicketSearchApp() {
 
       <button
         onClick={handleSubmit}
-        disabled={submitted}
+        // disabled={submitted}
         className="w-full bg-blue-600 text-white py-2 rounded">
-        {submitted ? 'Поиск...' : 'Найти билеты'}
+        Найти билеты
       </button>
     </div>
   );
