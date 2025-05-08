@@ -7,7 +7,6 @@ export default function TicketSearchApp() {
   const [date, setDate] = useState('');
   const [time1, setTime1] = useState('');
   const [time2, setTime2] = useState('');
-  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -24,7 +23,6 @@ export default function TicketSearchApp() {
     const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id;
     if (!userId) return alert('Не удалось получить user_id');
 
-    setSubmitted(true);
 
     await fetch('https://cdc0-158-220-102-147.ngrok-free.app/search', {
       method: 'POST',
@@ -100,7 +98,6 @@ export default function TicketSearchApp() {
 
       <button
         onClick={handleSubmit}
-        // disabled={submitted}
         className="w-full bg-blue-600 text-white py-2 rounded">
         Найти билеты
       </button>
