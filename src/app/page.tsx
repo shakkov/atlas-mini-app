@@ -27,7 +27,7 @@ export default function TicketSearchApp() {
 
     setSubmitted(true);
 
-    await fetch('https://atalas-app-back.onrender.com/search', {
+    await fetch('https://cdc0-158-220-102-147.ngrok-free.app/search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
