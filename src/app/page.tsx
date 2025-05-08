@@ -23,21 +23,24 @@ export default function TicketSearchApp() {
     const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id;
     if (!userId) return alert('Не удалось получить user_id');
 
+    try {
+      await fetch('https://cdc0-158-220-102-147.ngrok-free.app/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: userId,
+          from,
+          to,
+          date,
+          time1,
+          time2,
+        }),
+      });
+    } catch (error) {
+      alert(error);
+    }
 
-    await fetch('https://cdc0-158-220-102-147.ngrok-free.app/search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_id: userId,
-        from,
-        to,
-        date,
-        time1,
-        time2,
-      }),
-    });
-
-    window.Telegram.WebApp.close();
+    // window.Telegram.WebApp.close();
   };
 
   return (
@@ -96,9 +99,7 @@ export default function TicketSearchApp() {
         />
       </div>
 
-      <button
-        onClick={handleSubmit}
-        className="w-full bg-blue-600 text-white py-2 rounded">
+      <button onClick={handleSubmit} className="w-full bg-blue-600 text-white py-2 rounded">
         Найти билеты
       </button>
     </div>
