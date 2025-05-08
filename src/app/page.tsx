@@ -20,12 +20,9 @@ export default function TicketSearchApp() {
       tg.MainButton.hide();
 
       // Для отладки
-      console.log('Telegram WebApp initialized', {
-        userId: tg.initDataUnsafe?.user?.id,
-        initData: tg.initDataUnsafe,
-      });
+      alert('Telegram WebApp initialized');
     } else {
-      console.warn('Telegram WebApp not available');
+      alert('Telegram WebApp not available');
       // Для разработки вне Telegram можно установить тестовые данные
       if (process.env.NODE_ENV === 'development') {
         setUserId(123456789);
