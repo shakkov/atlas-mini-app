@@ -13,7 +13,7 @@ export default function TicketSearchApp() {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.MainButton.hide();
     } else {
-      console.warn('Telegram WebApp не доступен');
+      alert('Telegram WebApp не доступен');
     }
   }, []);
 
@@ -36,6 +36,7 @@ export default function TicketSearchApp() {
           time2,
         }),
       });
+      alert('Билеты найдены');
     } catch (error) {
       alert(error);
     }
