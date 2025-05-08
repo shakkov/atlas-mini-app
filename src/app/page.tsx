@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function TicketSearchApp() {
   const [from, setFrom] = useState('c625144'); // Минск
@@ -8,20 +8,20 @@ export default function TicketSearchApp() {
   const [time1, setTime1] = useState('');
   const [time2, setTime2] = useState('');
 
-  useEffect(() => {
-    try {
-      const tg = window.Telegram?.WebApp;
-      if (tg) {
-        tg.ready();
-        tg.MainButton.hide();
-      } else {
-        alert('Telegram WebApp не доступен');
-      }
-    } catch (err) {
-      alert('Ошибка при инициализации Telegram WebApp');
-      console.log('err', err);
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //     const tg = window.Telegram?.WebApp;
+  //     if (tg) {
+  //       tg.ready();
+  //       tg.MainButton.hide();
+  //     } else {
+  //       alert('Telegram WebApp не доступен');
+  //     }
+  //   } catch (err) {
+  //     alert('Ошибка при инициализации Telegram WebApp');
+  //     console.log('err', err);
+  //   }
+  // }, []);
 
   const handleSubmit = async () => {
     if (!date || !time1 || !time2) return alert('Заполните все поля');
