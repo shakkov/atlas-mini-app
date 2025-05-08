@@ -114,7 +114,7 @@ export default function TicketSearchApp() {
               type="time"
               value={time2}
               onChange={(e) => setTime2(e.target.value)}
-              className={styles.input}
+              className={styles.timeInput}
               disabled={isLoading}
             />
           </div>
