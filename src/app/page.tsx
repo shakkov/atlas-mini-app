@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function TicketSearchApp() {
   const [from, setFrom] = useState('c625144'); // Минск
@@ -7,30 +7,51 @@ export default function TicketSearchApp() {
   const [date, setDate] = useState('');
   const [time1, setTime1] = useState('');
   const [time2, setTime2] = useState('');
+  const [userId, setUserId] = useState(null);
+  const [isTelegramReady, setIsTelegramReady] = useState(false);
 
-  // useEffect(() => {
-  //   try {
-  //     const tg = window.Telegram?.WebApp;
-  //     if (tg) {
-  //       tg.ready();
-  //       tg.MainButton.hide();
-  //     } else {
-  //       alert('Telegram WebApp не доступен');
-  //     }
-  //   } catch (err) {
-  //     alert('Ошибка при инициализации Telegram WebApp');
-  //     console.log('err', err);
-  //   }
-  // }, []);
+  // Инициализация Telegram WebApp
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      setUserId(tg.initDataUnsafe?.user?.id);
+      setIsTelegramReady(true);
+      tg.MainButton.hide();
+
+      // Для отладки
+      console.log('Telegram WebApp initialized', {
+        userId: tg.initDataUnsafe?.user?.id,
+        initData: tg.initDataUnsafe,
+      });
+    } else {
+      console.warn('Telegram WebApp not available');
+      // Для разработки вне Telegram можно установить тестовые данные
+      if (process.env.NODE_ENV === 'development') {
+        setUserId(123456789);
+        setIsTelegramReady(true);
+      }
+    }
+  }, []);
 
   const handleSubmit = async () => {
-    if (!date || !time1 || !time2) return alert('Заполните все поля');
+    if (!date || !time1 || !time2) {
+      alert('Заполните все поля');
+      return;
+    }
 
-    const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id;
-    if (!userId) return alert('Не удалось получить user_id');
+    if (!isTelegramReady) {
+      alert('Приложение не инициализировано. Запустите в Telegram.');
+      return;
+    }
+
+    if (!userId) {
+      alert('Не удалось получить user_id');
+      return;
+    }
 
     try {
-      await fetch('https://1e89-158-220-102-147.ngrok-free.app/search', {
+      const response = await fetch('https://1e89-158-220-102-147.ngrok-free.app/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -42,17 +63,34 @@ export default function TicketSearchApp() {
           time2,
         }),
       });
-      alert('Билеты найдены');
-    } catch (error) {
-      alert(error);
-    }
 
-    // window.Telegram.WebApp.close();
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      alert('Билеты найдены');
+
+      // Если нужно закрыть WebApp после успешного поиска
+      // if (window.Telegram?.WebApp) {
+      //   window.Telegram.WebApp.close();
+      // }
+    } catch (error) {
+      console.error('Ошибка при поиске билетов:', error);
+      alert(`Ошибка: ${error.message}`);
+    }
   };
 
   return (
     <div className="p-4 space-y-4 text-base">
       <h2 className="text-xl font-bold">Поиск билетов</h2>
+
+      {!isTelegramReady && (
+        <div className="bg-yellow-100 text-yellow-800 p-2 rounded mb-4">
+          {typeof window !== 'undefined' && window.Telegram?.WebApp
+            ? 'Инициализация Telegram WebApp...'
+            : 'Запустите приложение в Telegram для корректной работы'}
+        </div>
+      )}
 
       <div>
         <label>Город отправления:</label>
@@ -106,9 +144,18 @@ export default function TicketSearchApp() {
         />
       </div>
 
-      <button onClick={handleSubmit} className="w-full bg-blue-600 text-white py-2 rounded">
+      <button
+        onClick={handleSubmit}
+        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        disabled={!isTelegramReady}>
         Найти билеты
       </button>
+
+      <div className="mt-4 p-2 bg-gray-100 rounded text-sm">
+        <h3 className="font-bold">Отладочная информация:</h3>
+        <p>Telegram WebApp: {isTelegramReady ? 'Готов' : 'Не готов'}</p>
+        <p>User ID: {userId || 'не получен'}</p>
+      </div>
     </div>
   );
 }
