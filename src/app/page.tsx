@@ -9,11 +9,16 @@ export default function TicketSearchApp() {
   const [time2, setTime2] = useState('');
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.MainButton.hide();
-    } else {
-      alert('Telegram WebApp не доступен');
+    try {
+      const tg = window.Telegram?.WebApp;
+      if (tg) {
+        tg.ready();
+        tg.MainButton.hide();
+      } else {
+        alert('Telegram WebApp не доступен');
+      }
+    } catch (err) {
+      alert('Ошибка при инициализации Telegram WebApp');
     }
   }, []);
 
