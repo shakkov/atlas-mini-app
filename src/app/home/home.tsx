@@ -31,7 +31,7 @@ export default function TicketSearchApp() {
     const userId = userRows?.find((row) => row.title === 'id')?.value;
 
     try {
-      const response = await fetch('https://1e89-158-220-102-147.ngrok-free.app/search', {
+      const response = await fetch('https://atalas-app-back.onrender.com/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
