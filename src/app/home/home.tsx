@@ -92,7 +92,7 @@ export default function TicketSearchApp() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className={styles.input}
+            className={styles.dateInput}
             disabled={isLoading}
           />
         </div>
@@ -104,7 +104,7 @@ export default function TicketSearchApp() {
               type="time"
               value={time1}
               onChange={(e) => setTime1(e.target.value)}
-              className={styles.input}
+              className={styles.timeInput}
               disabled={isLoading}
             />
           </div>
