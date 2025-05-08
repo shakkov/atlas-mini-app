@@ -13,7 +13,8 @@ export default function TicketSearchApp() {
   // Инициализация Telegram WebApp
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const tg: any = window.Telegram.WebApp;
       tg.ready();
       setUserId(tg.initDataUnsafe?.user?.id);
       setIsTelegramReady(true);
@@ -24,10 +25,6 @@ export default function TicketSearchApp() {
     } else {
       alert('Telegram WebApp not available');
       // Для разработки вне Telegram можно установить тестовые данные
-      if (process.env.NODE_ENV === 'development') {
-        setUserId(123456789);
-        setIsTelegramReady(true);
-      }
     }
   }, []);
 
@@ -73,7 +70,7 @@ export default function TicketSearchApp() {
       // }
     } catch (error) {
       console.error('Ошибка при поиске билетов:', error);
-      alert(`Ошибка: ${error.message}`);
+      alert(`Ошибка`);
     }
   };
 
