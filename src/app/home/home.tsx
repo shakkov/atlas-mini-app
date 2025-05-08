@@ -1,11 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import {
-  initDataState as _initDataState,
-  type User,
-  useSignal,
-} from '@telegram-apps/sdk-react';
+import { initDataState as _initDataState, type User, useSignal } from '@telegram-apps/sdk-react';
 function getUserRows(user: User): any[] {
   return Object.entries(user).map(([title, value]) => ({ title, value }));
 }
@@ -44,8 +40,9 @@ export default function TicketSearchApp() {
       });
       console.log('Search response:', response);
 
-      if (typeof window !== 'undefined' && window.Telegram?.WebApp?.close) {
-        window.Telegram.WebApp.close();
+      const telegramWebApp = (window as any).Telegram?.WebApp;
+      if (telegramWebApp?.close) {
+        telegramWebApp.close();
       }
     } catch (error) {
       console.error('Search error:', error);
