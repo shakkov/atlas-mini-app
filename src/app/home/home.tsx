@@ -39,6 +39,7 @@ export default function TicketSearchApp() {
   const [time1, setTime1] = useState('');
   const [time2, setTime2] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   // Получаем выбранные города для отображения
   const selectedFromCity = BELARUSIAN_CITIES.find((city) => city.id === from);
@@ -48,28 +49,27 @@ export default function TicketSearchApp() {
     return initDataState && initDataState.user ? getUserRows(initDataState.user) : undefined;
   }, [initDataState]);
 
-  // Сохранение выбора в CloudStorage/localStorage
   useEffect(() => {
-    alert('AAAAAAAAAA');
+    if (!isDataLoaded) return;
+
     const saveData = async () => {
       try {
-        alert('Данные сохранены');
+        console.log('[cloudStorage] Сохраняю:', from, to);
         await cloudStorage.setItem('lastFrom', from);
         await cloudStorage.setItem('lastTo', to);
-        alert('Данные сохранены');
+        console.log('[cloudStorage] ✅ Сохранено');
       } catch (error: any) {
-        alert('Ошибка при сохранении cloudStorage: ' + error.message);
+        console.error('Ошибка при сохранении cloudStorage:', error);
       }
     };
-    saveData();
-  }, [from, to]);
 
-  // Загрузка сохранённого выбора
-  // Инициализация и Загрузка cloudStorage
+    saveData();
+  }, [from, to, isDataLoaded]);
+
   useEffect(() => {
     const initApp = async () => {
       try {
-        init();
+        await init(); // <== важно не забыть await
 
         if (!cloudStorage.isSupported()) {
           alert('cloudStorage не поддерживается');
@@ -83,11 +83,10 @@ export default function TicketSearchApp() {
 
         console.log('[cloudStorage] Загружено:', { savedFrom, savedTo });
 
-        if (savedFrom.length > 0) setFrom(savedFrom);
-        else alert('lastFrom не найден в cloudStorage');
+        if (savedFrom) setFrom(savedFrom);
+        if (savedTo) setTo(savedTo);
 
-        if (savedTo.length > 0) setTo(savedTo);
-        else alert('lastTo не найден в cloudStorage');
+        setIsDataLoaded(true);
       } catch (error: any) {
         alert('Ошибка загрузки cloudStorage: ' + error.message);
         console.error('[cloudStorage] Ошибка при загрузке:', error);
