@@ -1,14 +1,14 @@
 .container {
   min-height: 100vh;
   padding: 20px;
-  background-color: #f9fafb;
+  background-color: rgba(249, 250, 251, 1);
 }
 
 .card {
   max-width: 500px;
   margin: 0 auto;
   background: white;
-  border-radius: 12px;
+  border-radius: 24px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 24px;
 }
@@ -22,6 +22,9 @@
 
 .formGroup {
   margin-bottom: 20px;
+  background-color: rgba(249, 250, 251, 1);
+  padding: 16px;
+  border-radius: 24px;
 }
 
 .label {
@@ -41,11 +44,12 @@
   box-sizing: border-box;
   padding: 10px 12px;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border-radius: 24px;
   font-size: 1rem;
   font-family: inherit;
   color: #1f2937;
-  background-color: white;
+  background-color: rgba(249, 250, 251, 1);
+
   transition: all 0.2s;
   height: 42px;
   outline: none;
@@ -85,10 +89,10 @@
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border-radius: 24px;
   font-size: 1rem;
   color: #1f2937;
-  background-color: white;
+  background-color: rgba(249, 250, 251, 1);
   height: 42px;
   box-sizing: border-box;
   outline: none;
@@ -136,6 +140,9 @@
 
 .timeGroup {
   flex: 1;
+  background-color: rgba(249, 250, 251, 1);
+  padding: 16px;
+  border-radius: 24px;
 }
 
 /* Для WebKit браузеров */
@@ -160,23 +167,25 @@
 .button {
   width: 100%;
   padding: 12px;
-  background-color: #3b82f6;
+  background-color: rgba(17, 24, 39, 1);
   color: white;
   border: none;
-  border-radius: 8px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
   margin-top: 24px;
+  border-radius: 24px;
+  min-height: 46px;
+
 }
 
 .button:hover {
-  background-color: #2563eb;
+  background-color: rgba(17, 24, 39, 1);
 }
 
 .button:disabled {
-  background-color: #93c5fd;
+  background-color: rgb(77, 77, 77);
   cursor: not-allowed;
 }
 
@@ -201,18 +210,18 @@
   width: 100%;
   padding: 8px;
   margin: 5px 0;
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  background-color: rgba(249, 250, 251, 1);
+  border: 1px solid rgba(249, 250, 251, 1);
+  border-radius: 24px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s;
   margin-bottom: 20px;
-
+  min-height: 46px;
 }
 
 .swapButton:hover {
-  background-color: #e0e0e0;
+  background-color: rgba(249, 250, 251, 1);
 }
 
 .swapButton:disabled {
@@ -223,8 +232,8 @@
 .selectedCities {
   margin: 15px 0;
   padding: 10px;
-  background-color: #f8f8f8;
-  border-radius: 8px;
+  background-color: rgba(249, 250, 251, 1);
+  border-radius: 24px;
   text-align: center;
   color: #1f2937;
 }
@@ -234,4 +243,5 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  border-radius: 24px;
 }
