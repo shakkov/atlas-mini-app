@@ -33,7 +33,7 @@ function getUserRows(user: User): any[] {
 export default function TicketSearchApp() {
   const initDataState = useSignal(_initDataState);
   const [from, setFrom] = useState<string>('c625665'); // Минск по умолчанию
-  const [to, setTo] = useState<string>(''); // Могилёв по умолчанию
+  const [to, setTo] = useState<string>('c625144'); // Могилёв по умолчанию
   const [date, setDate] = useState('');
   const [time1, setTime1] = useState('');
   const [time2, setTime2] = useState('');
@@ -75,12 +75,9 @@ export default function TicketSearchApp() {
         console.log('savedTo AAAAAAA', savedTo);
 
         if (savedFrom && savedFrom!.length > 0) {
-          alert('savedFrom' + savedFrom);
           setFrom(savedFrom);
         }
         if (savedTo && savedTo!.length > 0) {
-          alert('savedTo' + savedTo);
-
           setTo(savedTo);
         }
 
