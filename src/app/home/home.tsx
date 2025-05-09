@@ -55,6 +55,7 @@ export default function TicketSearchApp() {
       try {
         await window.Telegram!.WebApp.CloudStorage.setItem('lastFrom', from);
         await window.Telegram!.WebApp.CloudStorage.setItem('lastTo', to);
+        window.Telegram!.WebApp.CloudStorage.save();
       } catch (error: any) {
         alert('Ошибка сохранения cloudStorage: ' + error.message);
         console.error('[cloudStorage] Ошибка при сохранении:', error);
