@@ -69,6 +69,18 @@ export default function TicketSearchApp() {
   useEffect(() => {
     const initApp = async () => {
       try {
+        const tg = (window as any).Telegram?.WebApp;
+
+        if (!tg) {
+          alert('Приложение не запущено внутри Telegram');
+          return;
+        }
+
+        console.log('Telegram.WebApp найден, продолжаем');
+
+        // Инициализация вручную (если нужно)
+        tg.ready?.();
+
         if (!cloudStorage.isSupported()) {
           alert('cloudStorage не поддерживается');
           return;
@@ -77,10 +89,10 @@ export default function TicketSearchApp() {
         const savedFrom = await cloudStorage.getItem('lastFrom');
         const savedTo = await cloudStorage.getItem('lastTo');
 
-        alert('[cloudStorage] Загружено:' + savedFrom + savedTo);
+        alert('[cloudStorage] Загружено: ' + savedFrom + ', ' + savedTo);
 
-        if (savedFrom.length > 0) setFrom(savedFrom);
-        if (savedTo.length > 0) setTo(savedTo);
+        if (savedFrom) setFrom(savedFrom);
+        if (savedTo) setTo(savedTo);
 
         setIsDataLoaded(true);
       } catch (error: any) {
