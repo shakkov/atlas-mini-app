@@ -54,12 +54,12 @@ export default function TicketSearchApp() {
 
     const saveData = async () => {
       try {
-        console.log('[cloudStorage] Сохраняю:', from, to);
+        alert('[cloudStorage] Сохраняю:' + from + to);
         await cloudStorage.setItem('lastFrom', from);
         await cloudStorage.setItem('lastTo', to);
-        console.log('[cloudStorage] ✅ Сохранено');
+        alert('[cloudStorage] ✅ Сохранено');
       } catch (error: any) {
-        console.error('Ошибка при сохранении cloudStorage:', error);
+        alert('Ошибка при сохранении cloudStorage:' + error.message);
       }
     };
 
@@ -81,7 +81,7 @@ export default function TicketSearchApp() {
           cloudStorage.getItem('lastTo'),
         ]);
 
-        console.log('[cloudStorage] Загружено:', { savedFrom, savedTo });
+        alert('[cloudStorage] Загружено:' + savedFrom + savedTo);
 
         if (savedFrom) setFrom(savedFrom);
         if (savedTo) setTo(savedTo);
