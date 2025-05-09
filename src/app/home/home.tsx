@@ -52,32 +52,47 @@ export default function TicketSearchApp() {
   useEffect(() => {
     const saveData = async () => {
       try {
-        cloudStorage.setItem('lastFrom', from);
-        cloudStorage.setItem('lastTo', to);
+        await cloudStorage.setItem('lastFrom', from);
+        await cloudStorage.setItem('lastTo', to);
+        alert('Данные сохранены');
       } catch (error: any) {
-        alert(error.message);
+        alert('Ошибка при сохранении cloudStorage: ' + error.message);
       }
     };
     saveData();
   }, [from, to]);
 
   // Загрузка сохранённого выбора
+  // Инициализация и Загрузка cloudStorage
   useEffect(() => {
-    init();
+    const initApp = async () => {
+      try {
+        await init();
 
-    const loadData = async () => {
-      let savedFrom = null,
-        savedTo = null;
+        if (!cloudStorage.isSupported()) {
+          alert('cloudStorage не поддерживается');
+          return;
+        }
 
-      [savedFrom, savedTo] = await Promise.all([
-        cloudStorage.getItem('lastFrom'),
-        cloudStorage.getItem('lastTo'),
-      ]);
+        const [savedFrom, savedTo] = await Promise.all([
+          cloudStorage.getItem('lastFrom'),
+          cloudStorage.getItem('lastTo'),
+        ]);
 
-      if (savedFrom) setFrom(savedFrom);
-      if (savedTo) setTo(savedTo);
+        console.log('[cloudStorage] Загружено:', { savedFrom, savedTo });
+
+        if (savedFrom) setFrom(savedFrom);
+        else alert('lastFrom не найден в cloudStorage');
+
+        if (savedTo) setTo(savedTo);
+        else alert('lastTo не найден в cloudStorage');
+      } catch (error: any) {
+        alert('Ошибка загрузки cloudStorage: ' + error.message);
+        console.error('[cloudStorage] Ошибка при загрузке:', error);
+      }
     };
-    loadData();
+
+    initApp();
   }, []);
 
   const handleSubmit = async () => {
