@@ -1,7 +1,12 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { initDataState as _initDataState, type User, useSignal } from '@telegram-apps/sdk-react';
+import {
+  initDataState as _initDataState,
+  type User,
+  useSignal,
+  cloudStorage,
+} from '@telegram-apps/sdk-react';
 import styles from './TicketSearchApp.module.css';
 
 // Интерфейс для города
@@ -45,14 +50,8 @@ export default function TicketSearchApp() {
   // Сохранение выбора в CloudStorage/localStorage
   useEffect(() => {
     const saveData = async () => {
-      const tg = window.Telegram?.WebApp;
-      if (tg?.CloudStorage) {
-        await tg.CloudStorage.setItem('lastFrom', from);
-        await tg.CloudStorage.setItem('lastTo', to);
-      } else if (typeof window !== 'undefined') {
-        localStorage.setItem('lastFrom', from);
-        localStorage.setItem('lastTo', to);
-      }
+      await cloudStorage.setItem('lastFrom', from);
+      await cloudStorage.setItem('lastTo', to);
     };
     saveData();
   }, [from, to]);
@@ -60,19 +59,13 @@ export default function TicketSearchApp() {
   // Загрузка сохранённого выбора
   useEffect(() => {
     const loadData = async () => {
-      const tg = window.Telegram?.WebApp;
       let savedFrom = null,
         savedTo = null;
 
-      if (tg?.CloudStorage) {
-        [savedFrom, savedTo] = await Promise.all([
-          tg.CloudStorage.getItem('lastFrom'),
-          tg.CloudStorage.getItem('lastTo'),
-        ]);
-      } else if (typeof window !== 'undefined') {
-        savedFrom = localStorage.getItem('lastFrom');
-        savedTo = localStorage.getItem('lastTo');
-      }
+      [savedFrom, savedTo] = await Promise.all([
+        cloudStorage.getItem('lastFrom'),
+        cloudStorage.getItem('lastTo'),
+      ]);
 
       if (savedFrom) setFrom(savedFrom);
       if (savedTo) setTo(savedTo);
