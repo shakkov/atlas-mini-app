@@ -50,6 +50,7 @@ export default function TicketSearchApp() {
 
   // Сохранение выбора в CloudStorage/localStorage
   useEffect(() => {
+    alert('AAAAAAAAAA');
     const saveData = async () => {
       try {
         await cloudStorage.setItem('lastFrom', from);
@@ -81,10 +82,10 @@ export default function TicketSearchApp() {
 
         console.log('[cloudStorage] Загружено:', { savedFrom, savedTo });
 
-        if (savedFrom) setFrom(savedFrom);
+        if (savedFrom.length > 0) setFrom(savedFrom);
         else alert('lastFrom не найден в cloudStorage');
 
-        if (savedTo) setTo(savedTo);
+        if (savedTo.length > 0) setTo(savedTo);
         else alert('lastTo не найден в cloudStorage');
       } catch (error: any) {
         alert('Ошибка загрузки cloudStorage: ' + error.message);
