@@ -53,6 +53,7 @@ export default function TicketSearchApp() {
     alert('AAAAAAAAAA');
     const saveData = async () => {
       try {
+        alert('Данные сохранены');
         await cloudStorage.setItem('lastFrom', from);
         await cloudStorage.setItem('lastTo', to);
         alert('Данные сохранены');
@@ -68,7 +69,7 @@ export default function TicketSearchApp() {
   useEffect(() => {
     const initApp = async () => {
       try {
-        await init();
+        init();
 
         if (!cloudStorage.isSupported()) {
           alert('cloudStorage не поддерживается');
