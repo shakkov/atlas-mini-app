@@ -51,19 +51,15 @@ export default function TicketSearchApp() {
   // Сохранение выбора в CloudStorage/localStorage
   useEffect(() => {
     const saveData = async () => {
-      await cloudStorage.setItem('lastFrom', from);
-      await cloudStorage.setItem('lastTo', to);
+      cloudStorage.setItem('lastFrom', from);
+      cloudStorage.setItem('lastTo', to);
     };
     saveData();
   }, [from, to]);
 
   // Загрузка сохранённого выбора
   useEffect(() => {
-    if (cloudStorage.isSupported()) {
-      alert('Cloud Storage is supported');
-    } else {
-      alert('Cloud Storage is not supported');
-    }
+  
     const loadData = async () => {
       let savedFrom = null,
         savedTo = null;
