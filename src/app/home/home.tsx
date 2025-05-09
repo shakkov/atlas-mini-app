@@ -32,7 +32,7 @@ function getUserRows(user: User): any[] {
 
 export default function TicketSearchApp() {
   const initDataState = useSignal(_initDataState);
-  const [from, setFrom] = useState<string>(''); // Минск по умолчанию
+  const [from, setFrom] = useState<string>('c625665'); // Минск по умолчанию
   const [to, setTo] = useState<string>(''); // Могилёв по умолчанию
   const [date, setDate] = useState('');
   const [time1, setTime1] = useState('');
@@ -51,9 +51,9 @@ export default function TicketSearchApp() {
   useEffect(() => {
     const saveData = async () => {
       try {
-        await cloudStorage.setItem('lastFrom', from);
+        localStorage.setItem('lastFrom', from);
 
-        await cloudStorage.setItem('lastTo', to);
+        localStorage.setItem('lastTo', to);
       } catch (error: any) {
         alert('Ошибка сохранения cloudStorage: ' + error.message);
         console.error('[cloudStorage] Ошибка при сохранении:', error);
@@ -68,9 +68,8 @@ export default function TicketSearchApp() {
   useEffect(() => {
     const initApp = async () => {
       try {
-        console.log(cloudStorage, 'cloudStorage');
-        const savedFrom = await cloudStorage.getItem('lastFrom');
-        const savedTo = await cloudStorage.getItem('lastTo');
+        const savedFrom = localStorage.getItem('lastFrom');
+        const savedTo = localStorage.getItem('lastTo');
 
         console.log('savedFrom AAAAAAAA', savedFrom);
         console.log('savedTo AAAAAAA', savedTo);
