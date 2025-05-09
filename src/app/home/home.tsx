@@ -72,6 +72,8 @@ export default function TicketSearchApp() {
       try {
         // Проверяем, что cloudStorage доступен через window
         const tg = (window as any).Telegram?.WebApp;
+
+        tg.ready?.();
         const cloudStorage = tg?.cloudStorage; // Получаем cloudStorage из Telegram WebApp
 
         if (!cloudStorage) {
