@@ -6,6 +6,7 @@ import {
   type User,
   useSignal,
   cloudStorage,
+  init,
 } from '@telegram-apps/sdk-react';
 import styles from './TicketSearchApp.module.css';
 
@@ -58,6 +59,7 @@ export default function TicketSearchApp() {
 
   // Загрузка сохранённого выбора
   useEffect(() => {
+    init();
     const loadData = async () => {
       let savedFrom = null,
         savedTo = null;
