@@ -5,7 +5,7 @@ import {
   initDataState as _initDataState,
   type User,
   useSignal,
-  init,
+  cloudStorage,
 } from '@telegram-apps/sdk-react';
 import styles from './TicketSearchApp.module.css';
 
@@ -49,27 +49,27 @@ export default function TicketSearchApp() {
   }, [initDataState]);
 
   useEffect(() => {
-    if (!isDataLoaded) return;
-
     const saveData = async () => {
       try {
-        await window.Telegram!.WebApp.CloudStorage.setItem('lastFrom', from);
+        await cloudStorage.setItem('lastFrom', from);
 
-        await window.Telegram!.WebApp.CloudStorage.setItem('lastTo', to);
+        await cloudStorage.setItem('lastTo', to);
       } catch (error: any) {
         alert('Ошибка сохранения cloudStorage: ' + error.message);
         console.error('[cloudStorage] Ошибка при сохранении:', error);
       }
     };
 
-    saveData();
+    if (isDataLoaded) {
+      saveData();
+    }
   }, [from, to, isDataLoaded]);
 
   useEffect(() => {
     const initApp = async () => {
       try {
-        const savedFrom = await window.Telegram!.WebApp.CloudStorage.getItem('lastFrom');
-        const savedTo = await window.Telegram!.WebApp.CloudStorage.getItem('lastTo');
+        const savedFrom = await cloudStorage.getItem('lastFrom');
+        const savedTo = await cloudStorage.getItem('lastTo');
 
         console.log('savedFrom AAAAAAAA', savedFrom);
         console.log('savedTo AAAAAAA', savedTo);
