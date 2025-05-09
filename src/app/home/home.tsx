@@ -32,8 +32,8 @@ function getUserRows(user: User): any[] {
 
 export default function TicketSearchApp() {
   const initDataState = useSignal(_initDataState);
-  const [from, setFrom] = useState<string>('c625144'); // Минск по умолчанию
-  const [to, setTo] = useState<string>('c625665'); // Могилёв по умолчанию
+  const [from, setFrom] = useState<string>(''); // Минск по умолчанию
+  const [to, setTo] = useState<string>(''); // Могилёв по умолчанию
   const [date, setDate] = useState('');
   const [time1, setTime1] = useState('');
   const [time2, setTime2] = useState('');
@@ -68,6 +68,7 @@ export default function TicketSearchApp() {
   useEffect(() => {
     const initApp = async () => {
       try {
+        console.log(cloudStorage, 'cloudStorage');
         const savedFrom = await cloudStorage.getItem('lastFrom');
         const savedTo = await cloudStorage.getItem('lastTo');
 
