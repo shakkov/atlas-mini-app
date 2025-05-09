@@ -59,7 +59,11 @@ export default function TicketSearchApp() {
 
   // Загрузка сохранённого выбора
   useEffect(() => {
-    init();
+    if (cloudStorage.isSupported()) {
+      alert('Cloud Storage is supported');
+    } else {
+      alert('Cloud Storage is not supported');
+    }
     const loadData = async () => {
       let savedFrom = null,
         savedTo = null;
