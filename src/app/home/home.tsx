@@ -59,7 +59,8 @@ export default function TicketSearchApp() {
 
   // Загрузка сохранённого выбора
   useEffect(() => {
-  
+    init();
+
     const loadData = async () => {
       let savedFrom = null,
         savedTo = null;
