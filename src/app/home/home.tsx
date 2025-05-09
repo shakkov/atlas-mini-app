@@ -53,9 +53,22 @@ export default function TicketSearchApp() {
 
     const saveData = async () => {
       try {
-        await window.Telegram!.WebApp.CloudStorage.setItem('lastFrom', from);
-        await window.Telegram!.WebApp.CloudStorage.setItem('lastTo', to);
-        window.Telegram!.WebApp.CloudStorage.save();
+        window
+          .Telegram!.WebApp.CloudStorage.setItem('lastFrom', from)
+          .then(() => {
+            console.log('lastFrom saved');
+          })
+          .catch((error) => {
+            console.error('[cloudStorage] Ошибка при сохранении lastFrom:', error);
+          });
+        window
+          .Telegram!.WebApp.CloudStorage.setItem('lastTo', to)
+          .then(() => {
+            console.log('lastTo saved');
+          })
+          .catch((error) => {
+            console.error('[cloudStorage] Ошибка при сохранении lastTo:', error);
+          });
       } catch (error: any) {
         alert('Ошибка сохранения cloudStorage: ' + error.message);
         console.error('[cloudStorage] Ошибка при сохранении:', error);
@@ -70,6 +83,9 @@ export default function TicketSearchApp() {
       try {
         const savedFrom = await window.Telegram!.WebApp.CloudStorage.getItem('lastFrom');
         const savedTo = await window.Telegram!.WebApp.CloudStorage.getItem('lastTo');
+
+        console.log('savedFrom', savedFrom);
+        console.log('savedTo', savedTo);
 
         if (savedFrom && savedFrom!.length > 0) {
           alert('savedFrom' + savedFrom);
