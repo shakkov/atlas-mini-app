@@ -76,10 +76,8 @@ export default function TicketSearchApp() {
           return;
         }
 
-        const [savedFrom, savedTo] = await Promise.all([
-          cloudStorage.getItem('lastFrom'),
-          cloudStorage.getItem('lastTo'),
-        ]);
+        const savedFrom = await cloudStorage.getItem('lastFrom');
+        const savedTo = await cloudStorage.getItem('lastTo');
 
         alert('[cloudStorage] Загружено:' + savedFrom + savedTo);
 
