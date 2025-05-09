@@ -5,7 +5,6 @@ import {
   initDataState as _initDataState,
   type User,
   useSignal,
-  cloudStorage,
   init,
 } from '@telegram-apps/sdk-react';
 import styles from './TicketSearchApp.module.css';
@@ -53,6 +52,8 @@ export default function TicketSearchApp() {
     if (!isDataLoaded) return;
 
     const saveData = async () => {
+      const tg = (window as any).Telegram?.WebApp;
+      const cloudStorage = tg?.cloudStorage;
       try {
         alert('[cloudStorage] Сохраняю:' + from + to);
         await cloudStorage.setItem('lastFrom', from);
@@ -69,23 +70,18 @@ export default function TicketSearchApp() {
   useEffect(() => {
     const initApp = async () => {
       try {
+        // Проверяем, что cloudStorage доступен через window
         const tg = (window as any).Telegram?.WebApp;
+        const cloudStorage = tg?.cloudStorage; // Получаем cloudStorage из Telegram WebApp
 
-        if (!tg) {
-          alert('Приложение не запущено внутри Telegram');
+        if (!cloudStorage) {
+          alert('cloudStorage не найден в Telegram WebApp');
           return;
         }
 
-        console.log('Telegram.WebApp найден, продолжаем');
+        console.log('cloudStorage доступен через Telegram WebApp');
 
-        // Инициализация вручную (если нужно)
-        tg.ready?.();
-
-        if (!cloudStorage.isSupported()) {
-          alert('cloudStorage не поддерживается');
-          return;
-        }
-
+        // Получаем данные из cloudStorage
         const savedFrom = await cloudStorage.getItem('lastFrom');
         const savedTo = await cloudStorage.getItem('lastTo');
 
