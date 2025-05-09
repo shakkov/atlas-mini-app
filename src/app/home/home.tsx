@@ -6,7 +6,6 @@ import {
   type User,
   useSignal,
   cloudStorage,
-  useWebApp
 } from '@telegram-apps/sdk-react';
 import styles from './TicketSearchApp.module.css';
 
