@@ -43,6 +43,8 @@ function RootInner({ children }: PropsWithChildren) {
   useEffect(() => {
     const initTelegram = () => {
       const tg = window.Telegram?.WebApp;
+      alert('Telegram: ' + JSON.stringify(Object.keys(window)));
+
       if (tg) {
         tg.ready();
 
