@@ -99,7 +99,7 @@ export default function TicketSearchApp() {
 
         <div className={styles.timeContainer}>
           <div className={styles.timeGroup}>
-            <label className={styles.label}>Время от:</label>
+            <label className={styles.label}>Время отправления от:</label>
             <input
               type="time"
               value={time1}
@@ -109,7 +109,7 @@ export default function TicketSearchApp() {
             />
           </div>
           <div className={styles.timeGroup}>
-            <label className={styles.label}>Время до:</label>
+            <label className={styles.label}>Время отправления до:</label>
             <input
               type="time"
               value={time2}
