@@ -70,8 +70,15 @@ export default function TicketSearchApp() {
         const savedFrom = await window.Telegram!.WebApp.CloudStorage.getItem('lastFrom');
         const savedTo = await window.Telegram!.WebApp.CloudStorage.getItem('lastTo');
 
-        if (savedFrom && savedFrom!.length > 0) setFrom(savedFrom);
-        if (savedTo && savedTo!.length > 0) setTo(savedTo);
+        if (savedFrom && savedFrom!.length > 0) {
+          alert('savedFrom' + savedFrom);
+          setFrom(savedFrom);
+        }
+        if (savedTo && savedTo!.length > 0) {
+          alert('savedTo' + savedTo);
+
+          setTo(savedTo);
+        }
 
         setIsDataLoaded(true);
       } catch (error: any) {
