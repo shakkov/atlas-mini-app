@@ -69,8 +69,6 @@ export default function TicketSearchApp() {
   useEffect(() => {
     const initApp = async () => {
       try {
-        await init(); // <== важно не забыть await
-
         if (!cloudStorage.isSupported()) {
           alert('cloudStorage не поддерживается');
           return;
@@ -81,8 +79,8 @@ export default function TicketSearchApp() {
 
         alert('[cloudStorage] Загружено:' + savedFrom + savedTo);
 
-        if (savedFrom) setFrom(savedFrom);
-        if (savedTo) setTo(savedTo);
+        if (savedFrom.length > 0) setFrom(savedFrom);
+        if (savedTo.length > 0) setTo(savedTo);
 
         setIsDataLoaded(true);
       } catch (error: any) {
