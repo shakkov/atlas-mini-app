@@ -77,10 +77,11 @@
 
 /* Стили для date input */
 
-
-
 /* Общие стили для всех инпутов */
-.input, .select, .dateInput, .timeInput {
+.input,
+.select,
+.dateInput,
+.timeInput {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #d1d5db;
@@ -107,18 +108,20 @@
 }
 
 /* Стили для date/time inputs - теперь более мягкие */
-.dateInput, .timeInput {
+.dateInput,
+.timeInput {
   position: relative;
   /* Оставляем нативный пикер, но стилизуем поле ввода */
 }
 
 /* Стили для фокуса */
-.input:focus, .select:focus, 
-.dateInput:focus, .timeInput:focus {
+.input:focus,
+.select:focus,
+.dateInput:focus,
+.timeInput:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
-
 
 /* Для Firefox */
 .dateInput::-moz-focus-inner,
@@ -192,4 +195,43 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.swapButton {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+
+}
+
+.swapButton:hover {
+  background-color: #e0e0e0;
+}
+
+.swapButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.selectedCities {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  text-align: center;
+  color: #1f2937;
+}
+
+.buttonContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }

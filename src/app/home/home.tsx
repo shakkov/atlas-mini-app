@@ -1,8 +1,25 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { initDataState as _initDataState, type User, useSignal } from '@telegram-apps/sdk-react';
 import styles from './TicketSearchApp.module.css';
+
+// Интерфейс для города
+interface City {
+  id: string;
+  name: string;
+  region: string;
+}
+
+// Список всех областных городов Беларуси
+const BELARUSIAN_CITIES: City[] = [
+  { id: 'c625144', name: 'Минск', region: 'Минская область' },
+  { id: 'c625665', name: 'Могилёв', region: 'Могилёвская область' },
+  { id: 'c629634', name: 'Брест', region: 'Брестская область' },
+  { id: 'c620127', name: 'Витебск', region: 'Витебская область' },
+  { id: 'c627907', name: 'Гомель', region: 'Гомельская область' },
+  { id: 'c627904', name: 'Гродно', region: 'Гродненская область' },
+];
 
 function getUserRows(user: User): any[] {
   return Object.entries(user).map(([title, value]) => ({ title, value }));
@@ -10,16 +27,58 @@ function getUserRows(user: User): any[] {
 
 export default function TicketSearchApp() {
   const initDataState = useSignal(_initDataState);
-  const [from, setFrom] = useState('c625144');
-  const [to, setTo] = useState('c625665');
+  const [from, setFrom] = useState<string>('c625144'); // Минск по умолчанию
+  const [to, setTo] = useState<string>('c625665'); // Могилёв по умолчанию
   const [date, setDate] = useState('');
   const [time1, setTime1] = useState('');
   const [time2, setTime2] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Получаем выбранные города для отображения
+  const selectedFromCity = BELARUSIAN_CITIES.find((city) => city.id === from);
+  const selectedToCity = BELARUSIAN_CITIES.find((city) => city.id === to);
+
   const userRows = useMemo<any[] | undefined>(() => {
     return initDataState && initDataState.user ? getUserRows(initDataState.user) : undefined;
   }, [initDataState]);
+
+  // Сохранение выбора в CloudStorage/localStorage
+  useEffect(() => {
+    const saveData = async () => {
+      const tg = window.Telegram?.WebApp;
+      if (tg?.CloudStorage) {
+        await tg.CloudStorage.setItem('lastFrom', from);
+        await tg.CloudStorage.setItem('lastTo', to);
+      } else if (typeof window !== 'undefined') {
+        localStorage.setItem('lastFrom', from);
+        localStorage.setItem('lastTo', to);
+      }
+    };
+    saveData();
+  }, [from, to]);
+
+  // Загрузка сохранённого выбора
+  useEffect(() => {
+    const loadData = async () => {
+      const tg = window.Telegram?.WebApp;
+      let savedFrom = null,
+        savedTo = null;
+
+      if (tg?.CloudStorage) {
+        [savedFrom, savedTo] = await Promise.all([
+          tg.CloudStorage.getItem('lastFrom'),
+          tg.CloudStorage.getItem('lastTo'),
+        ]);
+      } else if (typeof window !== 'undefined') {
+        savedFrom = localStorage.getItem('lastFrom');
+        savedTo = localStorage.getItem('lastTo');
+      }
+
+      if (savedFrom) setFrom(savedFrom);
+      if (savedTo) setTo(savedTo);
+    };
+    loadData();
+  }, []);
 
   const handleSubmit = async () => {
     if (!date || !time1 || !time2) {
@@ -43,7 +102,8 @@ export default function TicketSearchApp() {
           time2,
         }),
       });
-      console.log('Search response:', response);
+
+      if (!response.ok) throw new Error('Ошибка запроса');
 
       const telegramWebApp = (window as any).Telegram?.WebApp;
       if (telegramWebApp?.close) {
@@ -57,49 +117,71 @@ export default function TicketSearchApp() {
     }
   };
 
+  // Функция для смены городов местами
+  const swapCities = () => {
+    const temp = from;
+    setFrom(to);
+    setTo(temp);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h2 className={styles.title}>Поиск билетов</h2>
+        <h2 className={styles.title}>Поиск билетов по Беларуси</h2>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>Город отправления:</label>
+          <label className={styles.label}>Откуда:</label>
           <select
             value={from}
             onChange={(e) => setFrom(e.target.value)}
             className={styles.select}
             disabled={isLoading}>
-            <option value="c625144">Минск</option>
-            <option value="c625665">Могилев</option>
+            {BELARUSIAN_CITIES.map((city) => (
+              <option key={city.id} value={city.id}>
+                {city.name} ({city.region})
+              </option>
+            ))}
           </select>
         </div>
 
+        <button
+          onClick={swapCities}
+          className={styles.swapButton}
+          disabled={isLoading}
+          title="Поменять местами">
+          ↔
+        </button>
+
         <div className={styles.formGroup}>
-          <label className={styles.label}>Город прибытия:</label>
+          <label className={styles.label}>Куда:</label>
           <select
             value={to}
             onChange={(e) => setTo(e.target.value)}
             className={styles.select}
             disabled={isLoading}>
-            <option value="c625665">Могилев</option>
-            <option value="c625144">Минск</option>
+            {BELARUSIAN_CITIES.map((city) => (
+              <option key={city.id} value={city.id}>
+                {city.name} ({city.region})
+              </option>
+            ))}
           </select>
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>Дата:</label>
+          <label className={styles.label}>Дата поездки:</label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className={styles.dateInput}
             disabled={isLoading}
+            min={new Date().toISOString().split('T')[0]}
           />
         </div>
 
         <div className={styles.timeContainer}>
           <div className={styles.timeGroup}>
-            <label className={styles.label}>Время отправления от:</label>
+            <label className={styles.label}>Время от:</label>
             <input
               type="time"
               value={time1}
@@ -109,7 +191,7 @@ export default function TicketSearchApp() {
             />
           </div>
           <div className={styles.timeGroup}>
-            <label className={styles.label}>Время отправления до:</label>
+            <label className={styles.label}>Время до:</label>
             <input
               type="time"
               value={time2}
@@ -120,24 +202,18 @@ export default function TicketSearchApp() {
           </div>
         </div>
 
+        <div className={styles.selectedCities}>
+          <p>
+            Маршрут: <strong>{selectedFromCity?.name}</strong> →{' '}
+            <strong>{selectedToCity?.name}</strong>
+          </p>
+        </div>
+
         <button onClick={handleSubmit} className={styles.button} disabled={isLoading}>
           {isLoading ? (
-            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg
-                className={styles.spinner}
-                style={{ width: '20px', height: '20px' }}
-                viewBox="0 0 24 24">
-                <circle
-                  style={{ opacity: 0.25 }}
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"></circle>
-                <path
-                  style={{ opacity: 0.75 }}
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <span className={styles.buttonContent}>
+              <svg className={styles.spinner} viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
               </svg>
               Поиск...
             </span>

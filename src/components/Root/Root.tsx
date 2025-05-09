@@ -23,6 +23,12 @@ declare global {
         ready: () => void;
         isExpanded?: boolean;
         expand: () => void;
+        CloudStorage: {
+          getItem: (key: string) => Promise<string | null>;
+          setItem: (key: string, value: string) => Promise<void>;
+          removeItem: (key: string) => Promise<void>;
+          getItems: (keys: string[]) => Promise<Record<string, string | null>>;
+        };
       };
     };
   }
