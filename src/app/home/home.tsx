@@ -52,12 +52,10 @@ export default function TicketSearchApp() {
     if (!isDataLoaded) return;
 
     const saveData = async () => {
-      const tg = (window as any).Telegram?.WebApp;
-      const cloudStorage = tg?.cloudStorage;
       try {
         alert('[cloudStorage] Сохраняю:' + from + to);
-        await cloudStorage.setItem('lastFrom', from);
-        await cloudStorage.setItem('lastTo', to);
+        await window.Telegram!.WebApp.CloudStorage.setItem('lastFrom', from);
+        await window.Telegram!.WebApp.CloudStorage.setItem('lastTo', to);
         alert('[cloudStorage] ✅ Сохранено');
       } catch (error: any) {
         alert('Ошибка при сохранении cloudStorage:' + error.message);
@@ -70,22 +68,9 @@ export default function TicketSearchApp() {
   useEffect(() => {
     const initApp = async () => {
       try {
-        // Проверяем, что cloudStorage доступен через window
-        const tg = (window as any).Telegram?.WebApp;
-
-        tg.ready?.();
-        const cloudStorage = tg?.cloudStorage; // Получаем cloudStorage из Telegram WebApp
-
-        if (!cloudStorage) {
-          alert('cloudStorage не найден в Telegram WebApp');
-          return;
-        }
-
-        console.log('cloudStorage доступен через Telegram WebApp');
-
         // Получаем данные из cloudStorage
-        const savedFrom = await cloudStorage.getItem('lastFrom');
-        const savedTo = await cloudStorage.getItem('lastTo');
+        const savedFrom = await window.Telegram!.WebApp.CloudStorage.getItem('lastFrom');
+        const savedTo = await window.Telegram!.WebApp.CloudStorage.getItem('lastTo');
 
         alert('[cloudStorage] Загружено: ' + savedFrom + ', ' + savedTo);
 
